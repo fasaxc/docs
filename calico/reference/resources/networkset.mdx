@@ -8,10 +8,17 @@ A network set resource (NetworkSet) represents an arbitrary set of IP subnetwork
 allowing it to be matched by $[prodname] policy. Network sets are useful for applying policy to traffic
 coming from (or going to) external, non-$[prodname], networks.
 
-`NetworkSet` is a namespaced resource. `NetworkSets` in a specific namespace
-only applies to [network policies](networkpolicy.mdx)
-in that namespace. Two resources are in the same namespace if the `namespace`
-value is set the same on both. (See [GlobalNetworkSet](globalnetworkset.mdx) for non-namespaced network sets.)
+`NetworkSet` is a namespaced resource in the same [selector scope](./networkpolicy.mdx#Selectors) as workload endpoints.
+Network policy rules that match workload endpoints in a particular namespace also
+match equivalently-labeled network sets in that namespace.
+
+:::tip
+
+Watch out for unintentionally matching network sets when trying to match
+workloads in another namespace.  It's usually best to avoid matching `all()`
+in another namespace to avoid accidentally matching network sets in that namespace.
+
+:::
 
 The metadata for each network set includes a set of labels. When $[prodname] is calculating the set of
 IPs that should match a source/destination selector within a
